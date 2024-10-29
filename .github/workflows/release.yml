@@ -27,7 +27,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: target
-        path: ${{ github.workspace }}/target/**/*
+        path: ${{ github.workspace }}/build/**/*
     - name: Extract changelog content
       run: |
         sed -n "/^## \[$RELEASE_VERSION]/,/^## /p" CHANGELOG.md | sed '1d;$d' > changelog_body.md
