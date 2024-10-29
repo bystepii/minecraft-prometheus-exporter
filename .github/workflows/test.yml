@@ -2,9 +2,9 @@ name: Maven Test
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, multipaper ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, multipaper ]
 
 jobs:
   build:
