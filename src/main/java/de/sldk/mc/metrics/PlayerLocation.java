@@ -13,7 +13,7 @@ public class PlayerLocation extends Metric {
     private final static Gauge PLAYER_LOCATION = Gauge.build()
             .name(prefix("player_location"))
             .help("Player location by player name")
-            .labelNames("name", "uid", "world", "x", "y", "z", "chunk_x", "chunk_z", "chunk_owner")
+            .labelNames("name", "uid", "world", "chunk_x", "chunk_z", "chunk_owner")
             .create();
 
     public PlayerLocation(Plugin plugin) {
@@ -30,14 +30,10 @@ public class PlayerLocation extends Metric {
             String world = player.getWorld().getName();
             Location location = player.getLocation();
             Chunk chunk = location.getChunk();
-            double x = location.getX();
-            double y = location.getY();
-            double z = location.getZ();
             int chunkX = chunk.getX();
             int chunkZ = chunk.getZ();
             String chunkOwner = MultiLib.isChunkLocal(chunk) ? serverName : "";
-            PLAYER_LOCATION.labels(playerName, uid, world, String.valueOf(x), String.valueOf(y),
-                    String.valueOf(z), String.valueOf(chunkX), String.valueOf(chunkZ), chunkOwner).set(1);
+            PLAYER_LOCATION.labels(playerName, uid, world, String.valueOf(chunkX), String.valueOf(chunkZ), chunkOwner).set(1);
         }
     }
 
