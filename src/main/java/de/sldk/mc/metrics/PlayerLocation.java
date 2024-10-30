@@ -22,6 +22,7 @@ public class PlayerLocation extends Metric {
 
     @Override
     public final void doCollect() {
+        PLAYER_LOCATION.clear();
         for (Player player : MultiLib.getLocalOnlinePlayers()) {
             String serverName = MultiLib.getLocalServerName();
             String playerName = player.getName();
