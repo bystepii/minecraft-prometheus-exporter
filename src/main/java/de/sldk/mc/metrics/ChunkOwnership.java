@@ -13,10 +13,11 @@ import de.sldk.mc.collectors.ChunkOwnershipCollector;
 import io.prometheus.client.Gauge;
 
 public class ChunkOwnership extends WorldMetric {
+
     private static final Gauge CHUNK_OWNERSHIP = Gauge.build()
             .name(prefix("chunk_ownership"))
             .help("Chunk ownership per world")
-            .labelNames("world", "server", "chunk_x", "chunk_z")
+            .labelNames("world", "owner", "chunk_x", "chunk_z")
             .create();
 
     private final ChunkOwnershipCollector chunkOwnershipCollector = new ChunkOwnershipCollector();
@@ -41,7 +42,6 @@ public class ChunkOwnership extends WorldMetric {
     public void clear() {
         CHUNK_OWNERSHIP.clear();
     }
-
 
     @Override
     protected void collect(World world) {
