@@ -36,7 +36,8 @@ public class PrometheusExporterConfig {
             metricConfig("player_online", false, PlayerOnline::new),
             metricConfig("player_statistic", false, PlayerStatistics::new),
 
-            metricConfig("players_connected", true, PlayersConnected::new)
+            metricConfig("players_connected", true, PlayersConnected::new),
+            metricConfig("chunk_ownership", true, ChunkOwnership::new)
     );
 
     private final PrometheusExporter prometheusExporter;
