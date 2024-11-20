@@ -36,7 +36,7 @@ dependencies {
 }
 
 group = "de.sldk.mc"
-version = "3.1.3-SNAPSHOT"
+version = "3.1.4-SNAPSHOT"
 description = "minecraft-prometheus-exporter"
 
 java {
