@@ -36,6 +36,8 @@ public class ChunkOwnership extends WorldMetric {
             int z = chunk.getZ();
             if (MultiLib.isChunkExternal(chunk))
                 continue;
+            if (!MultiLib.isChunkLocal(chunk))
+                continue;
             CHUNK_OWNERSHIP.labels(w, s, String.valueOf(x), String.valueOf(z)).set(1);
         }
     }
