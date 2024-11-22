@@ -2,7 +2,7 @@ plugins {
     `java-library`
     `maven-publish`
     kotlin("jvm") version "2.0.21"
-    id("io.papermc.paperweight.userdev") version "1.7.5"
+    //id("io.papermc.paperweight.userdev") version "1.7.5"
 }
 
 repositories {
@@ -19,7 +19,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     testImplementation("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-    paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+    //paperweight.devBundle("puregero.multipaper", "1.20.1-R0.1-SNAPSHOT")
     //compileOnly("com.github.puregero:multipaper-api:1.20.1-R0.1-SNAPSHOT")
     //testImplementation("com.github.puregero:multipaper-api:1.20.1-R0.1-SNAPSHOT")
 
