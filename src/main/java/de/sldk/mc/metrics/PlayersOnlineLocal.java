@@ -34,14 +34,4 @@ public class PlayersOnlineLocal extends WorldMetric {
         // logger.info("Local players online in world " + worldName + ": " + localPlayers);
         PLAYERS_ONLINE.labels(worldName).set(localPlayers);
     }
-
-    @Override
-    public boolean isFoliaCapable() {
-        return true;
-    }
-
-    @Override
-    public boolean isAsyncCapable() {
-        return true;
-    }
 }
