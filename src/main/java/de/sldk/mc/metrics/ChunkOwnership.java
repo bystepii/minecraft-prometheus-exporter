@@ -30,24 +30,36 @@ public class ChunkOwnership extends WorldMetric {
 
     @Override
     public void clear() {
+        logger.info("Clearing chunk ownership metrics");
         CHUNK_OWNERSHIP.clear();
+        logger.info("Cleared chunk ownership metrics");
     }
 
     @Override
     protected void collect(World world) {
+        logger.info("Collecting chunk ownership metrics");
         String w = world.getName();
+        logger.info("World: " + w);
         Chunk[] chunks = world.getLoadedChunks();
+        logger.info("World: " + w + " Chunks: " + chunks.length);
 
         // logger.info("World: " + w + " Server: " + s + " Chunks: " + chunks.length);
 
         for (Chunk chunk : chunks) {
             int x = chunk.getX();
             int z = chunk.getZ();
-            if (MultiLib.isChunkExternal(chunk))
+            logger.info("World: " + w + " Chunk: " + x + " " + z);
+            if (MultiLib.isChunkExternal(chunk)) {
+                logger.info("World: " + w + " Chunk: " + x + " " + z + " is external");
                 continue;
-            if (!MultiLib.isChunkLocal(chunk))
+            }
+            if (!MultiLib.isChunkLocal(chunk)) {
+                logger.info("World: " + w + " Chunk: " + x + " " + z + " is not local");
                 continue;
+            }
+            logger.info("World: " + w + " Chunk: " + x + " " + z + " is local");
             CHUNK_OWNERSHIP.labels(w, serverName, String.valueOf(x), String.valueOf(z)).set(1);
+            logger.info("World: " + w + " Chunk: " + x + " " + z + " set");
         }
     }
 }
