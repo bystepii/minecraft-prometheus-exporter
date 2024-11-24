@@ -19,11 +19,13 @@ public class ChunkOwnership extends WorldMetric {
             .create();
 
     private static Logger logger;
+    private static String serverName;
 
     public ChunkOwnership(Plugin plugin) {
-       super(plugin, CHUNK_OWNERSHIP);
+        super(plugin, CHUNK_OWNERSHIP);
 
-       logger = plugin.getLogger();
+        serverName = MultiLib.getLocalServerName();
+        logger = plugin.getLogger();
     }
 
     @Override
@@ -34,7 +36,6 @@ public class ChunkOwnership extends WorldMetric {
     @Override
     protected void collect(World world) {
         String w = world.getName();
-        String s = MultiLib.getLocalServerName();
         Chunk[] chunks = world.getLoadedChunks();
 
         // logger.info("World: " + w + " Server: " + s + " Chunks: " + chunks.length);
@@ -46,7 +47,7 @@ public class ChunkOwnership extends WorldMetric {
                 continue;
             if (!MultiLib.isChunkLocal(chunk))
                 continue;
-            CHUNK_OWNERSHIP.labels(w, s, String.valueOf(x), String.valueOf(z)).set(1);
+            CHUNK_OWNERSHIP.labels(w, serverName, String.valueOf(x), String.valueOf(z)).set(1);
         }
     }
 }

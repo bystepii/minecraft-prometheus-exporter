@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 public class PlayerLocation extends Metric {
 
@@ -19,10 +20,15 @@ public class PlayerLocation extends Metric {
             .labelNames("name", "uid", "world", "chunk_x", "chunk_z", "chunk_owner")
             .create();
 
-    private Method getChunkHolderMethod;
+    private static Logger logger;
+    private static Method getChunkHolderMethod;
+    private static String serverName;
 
     public PlayerLocation(Plugin plugin) {
         super(plugin, PLAYER_LOCATION);
+
+        serverName = MultiLib.getLocalServerName();
+        logger = plugin.getLogger();
 
         try {
             Class<?> multiPaperClass = Class.forName("puregero.multipaper.MultiPaper");
@@ -37,7 +43,6 @@ public class PlayerLocation extends Metric {
     public final void doCollect() {
         PLAYER_LOCATION.clear();
         for (Player player : MultiLib.getLocalOnlinePlayers()) {
-            String serverName = MultiLib.getLocalServerName();
             String playerName = player.getName();
             String uid = getUid(player);
             String world = player.getWorld().getName();
@@ -47,7 +52,7 @@ public class PlayerLocation extends Metric {
             int chunkZ = chunk.getZ();
             String chunkOwner = "";
             if (MultiLib.isChunkLocal(chunk)) {
-                chunkOwner = MultiLib.getLocalServerName();
+                chunkOwner = serverName;
             }
             else {
                 try {
@@ -61,6 +66,7 @@ public class PlayerLocation extends Metric {
                     e.printStackTrace();
                 }
             }
+            logger.info("Player: " + playerName + " World: " + world + " Chunk: " + chunkX + " " + chunkZ + " Owner: " + chunkOwner);
             PLAYER_LOCATION.labels(playerName, uid, world, String.valueOf(chunkX), String.valueOf(chunkZ), chunkOwner).set(1);
         }
     }

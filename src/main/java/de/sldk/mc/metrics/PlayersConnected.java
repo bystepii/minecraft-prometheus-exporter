@@ -13,8 +13,12 @@ public class PlayersConnected extends Metric {
             .labelNames("player", "server")
             .create();
 
+    private static String serverName;
+
     public PlayersConnected(Plugin plugin) {
         super(plugin, PLAYERS_CONNECTED);
+
+        serverName = MultiLib.getLocalServerName();
     }
 
     @Override
@@ -23,10 +27,10 @@ public class PlayersConnected extends Metric {
 
         for (Player p: Bukkit.getOnlinePlayers()) {
             String playerName = p.getName();
-            String serverName = MultiLib.getExternalServerName(p);
-            if (serverName == null)
-                serverName = MultiLib.getLocalServerName();
-            PLAYERS_CONNECTED.labels(playerName, serverName).set(1);
+            String s = MultiLib.getExternalServerName(p);
+            if (s == null)
+                s = serverName;
+            PLAYERS_CONNECTED.labels(playerName, s).set(1);
         }
     }
 }
