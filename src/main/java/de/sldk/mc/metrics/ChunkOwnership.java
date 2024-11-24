@@ -37,7 +37,7 @@ public class ChunkOwnership extends WorldMetric {
         String s = MultiLib.getLocalServerName();
         Chunk[] chunks = world.getLoadedChunks();
 
-        logger.info("World: " + w + " Server: " + s + " Chunks: " + chunks.length);
+        // logger.info("World: " + w + " Server: " + s + " Chunks: " + chunks.length);
 
         for (Chunk chunk : chunks) {
             int x = chunk.getX();
