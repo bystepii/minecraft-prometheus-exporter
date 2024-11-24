@@ -5,6 +5,8 @@ import io.prometheus.client.Gauge;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 
+import java.util.logging.Logger;
+
 public class PlayersOnlineLocal extends WorldMetric {
 
     private static final Gauge PLAYERS_ONLINE = Gauge.build()
@@ -13,8 +15,12 @@ public class PlayersOnlineLocal extends WorldMetric {
             .labelNames("world")
             .create();
 
+    private static Logger logger;
+
     public PlayersOnlineLocal(Plugin plugin) {
         super(plugin, PLAYERS_ONLINE);
+
+        logger = plugin.getLogger();
     }
 
     @Override
@@ -23,7 +29,10 @@ public class PlayersOnlineLocal extends WorldMetric {
 
     @Override
     protected void collect(World world) {
-        PLAYERS_ONLINE.labels(world.getName()).set(world.getPlayers().stream().filter(MultiLib::isLocalPlayer).count());
+        String worldName = world.getName();
+        long localPlayers = world.getPlayers().stream().filter(MultiLib::isLocalPlayer).count();
+        logger.info("Local players online in world " + worldName + ": " + localPlayers);
+        PLAYERS_ONLINE.labels(worldName).set(localPlayers);
     }
 
     @Override
