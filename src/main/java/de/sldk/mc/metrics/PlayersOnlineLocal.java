@@ -31,7 +31,7 @@ public class PlayersOnlineLocal extends WorldMetric {
     protected void collect(World world) {
         String worldName = world.getName();
         long localPlayers = world.getPlayers().stream().filter(MultiLib::isLocalPlayer).count();
-        logger.info("Local players online in world " + worldName + ": " + localPlayers);
+        // logger.info("Local players online in world " + worldName + ": " + localPlayers);
         PLAYERS_ONLINE.labels(worldName).set(localPlayers);
     }
 
