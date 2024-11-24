@@ -19,8 +19,18 @@ public class PlayerLocation extends Metric {
             .labelNames("name", "uid", "world", "chunk_x", "chunk_z", "chunk_owner")
             .create();
 
+    private Method getChunkHolderMethod;
+
     public PlayerLocation(Plugin plugin) {
         super(plugin, PLAYER_LOCATION);
+
+        try {
+            Class<?> multiPaperClass = Class.forName("puregero.multipaper.MultiPaper");
+            getChunkHolderMethod = multiPaperClass.getDeclaredMethod("getChunkHolder", String.class, int.class, int.class);
+            getChunkHolderMethod.setAccessible(true);
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -41,16 +51,13 @@ public class PlayerLocation extends Metric {
             }
             else {
                 try {
-                    Class<?> multiPaperClass = Class.forName("puregero.multipaper.MultiPaper");
-                    Method getChunkHolderMethod = multiPaperClass.getDeclaredMethod("getChunkHolder", String.class, int.class, int.class);
                     Object newChunkHolder = getChunkHolderMethod.invoke(null, world, chunkX, chunkZ);
                     Field externalOwnerField = newChunkHolder.getClass().getDeclaredField("externalOwner");
                     externalOwnerField.setAccessible(true);
                     Field nameField = externalOwnerField.getType().getDeclaredField("name");
                     nameField.setAccessible(true);
                     chunkOwner = (String) nameField.get(externalOwnerField.get(newChunkHolder));
-                } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException |
-                         InvocationTargetException | NoSuchMethodException e) {
+                } catch (NoSuchFieldException | IllegalAccessException  | InvocationTargetException e) {
                     e.printStackTrace();
                 }
             }
