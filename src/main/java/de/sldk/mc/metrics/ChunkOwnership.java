@@ -8,6 +8,8 @@ import com.github.puregero.multilib.MultiLib;
 
 import io.prometheus.client.Gauge;
 
+import java.util.logging.Logger;
+
 public class ChunkOwnership extends WorldMetric {
 
     private static final Gauge CHUNK_OWNERSHIP = Gauge.build()
@@ -16,8 +18,12 @@ public class ChunkOwnership extends WorldMetric {
             .labelNames("world", "owner", "chunk_x", "chunk_z")
             .create();
 
+    private static Logger logger;
+
     public ChunkOwnership(Plugin plugin) {
-        super(plugin, CHUNK_OWNERSHIP);
+       super(plugin, CHUNK_OWNERSHIP);
+
+       logger = plugin.getLogger();
     }
 
     @Override
@@ -30,6 +36,8 @@ public class ChunkOwnership extends WorldMetric {
         String w = world.getName();
         String s = MultiLib.getLocalServerName();
         Chunk[] chunks = world.getLoadedChunks();
+
+        logger.info("World: " + w + " Server: " + s + " Chunks: " + chunks.length);
 
         for (Chunk chunk : chunks) {
             int x = chunk.getX();
