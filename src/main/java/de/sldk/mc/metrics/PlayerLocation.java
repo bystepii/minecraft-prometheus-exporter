@@ -62,11 +62,11 @@ public class PlayerLocation extends Metric {
                     Field nameField = externalOwnerField.getType().getDeclaredField("name");
                     nameField.setAccessible(true);
                     chunkOwner = (String) nameField.get(externalOwnerField.get(newChunkHolder));
-                } catch (NoSuchFieldException | IllegalAccessException  | InvocationTargetException e) {
+                } catch (NoSuchFieldException | IllegalAccessException  | InvocationTargetException | NullPointerException e) {
                     e.printStackTrace();
                 }
             }
-            logger.info("Player: " + playerName + " World: " + world + " Chunk: " + chunkX + " " + chunkZ + " Owner: " + chunkOwner);
+            // logger.info("Player: " + playerName + " World: " + world + " Chunk: " + chunkX + " " + chunkZ + " Owner: " + chunkOwner);
             PLAYER_LOCATION.labels(playerName, uid, world, String.valueOf(chunkX), String.valueOf(chunkZ), chunkOwner).set(1);
         }
     }
