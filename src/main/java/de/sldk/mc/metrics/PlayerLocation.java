@@ -1,7 +1,7 @@
 package de.sldk.mc.metrics;
 
-import com.github.puregero.multilib.MultiLib;
 import io.prometheus.client.Gauge;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -27,7 +27,7 @@ public class PlayerLocation extends Metric {
     public PlayerLocation(Plugin plugin) {
         super(plugin, PLAYER_LOCATION);
 
-        serverName = MultiLib.getLocalServerName();
+        serverName = Bukkit.getLocalServerName();
         logger = plugin.getLogger();
 
         try {
@@ -42,7 +42,7 @@ public class PlayerLocation extends Metric {
     @Override
     public final void doCollect() {
         PLAYER_LOCATION.clear();
-        for (Player player : MultiLib.getLocalOnlinePlayers()) {
+        for (Player player : Bukkit.getLocalOnlinePlayers()) {
             String playerName = player.getName();
             String uid = getUid(player);
             String world = player.getWorld().getName();
@@ -51,10 +51,10 @@ public class PlayerLocation extends Metric {
             int chunkX = chunk.getX();
             int chunkZ = chunk.getZ();
             String chunkOwner = "";
-            if (MultiLib.isChunkLocal(chunk)) {
+            if (chunk.isLocalChunk()) {
                 chunkOwner = serverName;
             }
-            else if (MultiLib.isChunkExternal(chunk)) {
+            else if (chunk.isExternalChunk()) {
                 try {
                     Object newChunkHolder = getChunkHolderMethod.invoke(null, world, chunkX, chunkZ);
                     Field externalOwnerField = newChunkHolder.getClass().getDeclaredField("externalOwner");

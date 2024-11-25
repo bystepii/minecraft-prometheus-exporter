@@ -17,13 +17,13 @@ repositories {
 }
 
 dependencies {
+    compileOnly("com.github.puregero:multipaper-api:1.20.1-R0.1-SNAPSHOT")
+    testImplementation("com.github.puregero:multipaper-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     testImplementation("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     //paperweight.devBundle("puregero.multipaper", "1.20.1-R0.1-SNAPSHOT")
-    //compileOnly("com.github.puregero:multipaper-api:1.20.1-R0.1-SNAPSHOT")
-    //testImplementation("com.github.puregero:multipaper-api:1.20.1-R0.1-SNAPSHOT")
 
-    implementation("com.github.puregero:multilib:1.2.4")
+    //implementation("com.github.puregero:multilib:1.2.4")
 
     api("org.eclipse.jetty:jetty-server:12.0.14")
     api("io.prometheus:simpleclient_common:0.16.0")

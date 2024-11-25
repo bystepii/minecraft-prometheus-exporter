@@ -1,10 +1,9 @@
 package de.sldk.mc.metrics;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
-
-import com.github.puregero.multilib.MultiLib;
 
 import io.prometheus.client.Gauge;
 
@@ -24,7 +23,7 @@ public class ChunkOwnership extends WorldMetric {
     public ChunkOwnership(Plugin plugin) {
         super(plugin, CHUNK_OWNERSHIP);
 
-        serverName = MultiLib.getLocalServerName();
+        serverName = Bukkit.getLocalServerName();
         logger = plugin.getLogger();
     }
 
@@ -43,9 +42,9 @@ public class ChunkOwnership extends WorldMetric {
         for (Chunk chunk : chunks) {
             int x = chunk.getX();
             int z = chunk.getZ();
-            if (MultiLib.isChunkExternal(chunk))
+            if (chunk.isExternalChunk())
                 continue;
-            if (!MultiLib.isChunkLocal(chunk))
+            if (!chunk.isLocalChunk())
                 continue;
             CHUNK_OWNERSHIP.labels(w, serverName, String.valueOf(x), String.valueOf(z)).set(1);
         }

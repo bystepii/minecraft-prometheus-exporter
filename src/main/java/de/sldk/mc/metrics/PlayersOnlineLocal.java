@@ -1,8 +1,8 @@
 package de.sldk.mc.metrics;
 
-import com.github.puregero.multilib.MultiLib;
 import io.prometheus.client.Gauge;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Logger;
@@ -30,7 +30,7 @@ public class PlayersOnlineLocal extends WorldMetric {
     @Override
     protected void collect(World world) {
         String worldName = world.getName();
-        long localPlayers = world.getPlayers().stream().filter(MultiLib::isLocalPlayer).count();
+        long localPlayers = world.getPlayers().stream().filter(Player::isLocalPlayer).count();
         // logger.info("Local players online in world " + worldName + ": " + localPlayers);
         PLAYERS_ONLINE.labels(worldName).set(localPlayers);
     }

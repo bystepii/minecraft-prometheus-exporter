@@ -4,7 +4,6 @@ import io.prometheus.client.Gauge;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import com.github.puregero.multilib.MultiLib;
 
 public class PlayersConnected extends Metric {
     private static final Gauge PLAYERS_CONNECTED = Gauge.build()
@@ -18,7 +17,7 @@ public class PlayersConnected extends Metric {
     public PlayersConnected(Plugin plugin) {
         super(plugin, PLAYERS_CONNECTED);
 
-        serverName = MultiLib.getLocalServerName();
+        serverName = Bukkit.getLocalServerName();
     }
 
     @Override
@@ -27,7 +26,7 @@ public class PlayersConnected extends Metric {
 
         for (Player p: Bukkit.getOnlinePlayers()) {
             String playerName = p.getName();
-            String s = MultiLib.getExternalServerName(p);
+            String s = p.getExternalServerName();
             if (s == null)
                 s = serverName;
             PLAYERS_CONNECTED.labels(playerName, s).set(1);
