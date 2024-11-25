@@ -54,17 +54,21 @@ public class PlayerLocation extends Metric {
             if (MultiLib.isChunkLocal(chunk)) {
                 chunkOwner = serverName;
             }
-            else {
+            else if (MultiLib.isChunkExternal(chunk)) {
                 try {
                     Object newChunkHolder = getChunkHolderMethod.invoke(null, world, chunkX, chunkZ);
                     Field externalOwnerField = newChunkHolder.getClass().getDeclaredField("externalOwner");
                     externalOwnerField.setAccessible(true);
                     Field nameField = externalOwnerField.getType().getDeclaredField("name");
                     nameField.setAccessible(true);
-                    chunkOwner = (String) nameField.get(externalOwnerField.get(newChunkHolder));
+                    Object externalOwner = externalOwnerField.get(newChunkHolder);
+                    chunkOwner = (String) nameField.get(externalOwner);
                 } catch (NoSuchFieldException | IllegalAccessException  | InvocationTargetException | NullPointerException e) {
                     e.printStackTrace();
                 }
+            }
+            else {
+                logger.warning("Chunk is not local or external: " + chunk);
             }
             // logger.info("Player: " + playerName + " World: " + world + " Chunk: " + chunkX + " " + chunkZ + " Owner: " + chunkOwner);
             PLAYER_LOCATION.labels(playerName, uid, world, String.valueOf(chunkX), String.valueOf(chunkZ), chunkOwner).set(1);
