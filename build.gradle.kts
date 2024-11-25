@@ -8,17 +8,24 @@ plugins {
 repositories {
     mavenLocal()
     maven {
-        url = uri("https://repo.papermc.io/repository/maven-public/")
+        url = uri("https://maven.pkg.github.com/bystepii/MultiPaper")
+        credentials {
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USER_REF")
+            password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN_REF")
+        }
     }
     maven {
-        url = uri("https://repo.clojars.org/")
+        url = uri("https://repo.papermc.io/repository/maven-public/")
     }
+    //maven {
+    //    url = uri("https://repo.clojars.org/")
+    //}
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("com.github.puregero:multipaper-api:1.20.1-R0.1-SNAPSHOT")
-    testImplementation("com.github.puregero:multipaper-api:1.20.1-R0.1-SNAPSHOT")
+    compileOnly("puregero.multipaper:multipaper-api:1.20.1-R0.1-SNAPSHOT")
+    testImplementation("puregero.multipaper:multipaper-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     testImplementation("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     //paperweight.devBundle("puregero.multipaper", "1.20.1-R0.1-SNAPSHOT")
