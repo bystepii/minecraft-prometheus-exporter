@@ -7,9 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 public class PlayerLocation extends Metric {
@@ -21,7 +18,6 @@ public class PlayerLocation extends Metric {
             .create();
 
     private static Logger logger;
-    private static Method getChunkHolderMethod;
     private static String serverName;
 
     public PlayerLocation(Plugin plugin) {
@@ -29,14 +25,6 @@ public class PlayerLocation extends Metric {
 
         serverName = Bukkit.getLocalServerName();
         logger = plugin.getLogger();
-
-        try {
-            Class<?> multiPaperClass = Class.forName("puregero.multipaper.MultiPaper");
-            getChunkHolderMethod = multiPaperClass.getDeclaredMethod("getChunkHolder", String.class, int.class, int.class);
-            getChunkHolderMethod.setAccessible(true);
-        } catch (ClassNotFoundException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -51,24 +39,13 @@ public class PlayerLocation extends Metric {
             int chunkX = chunk.getX();
             int chunkZ = chunk.getZ();
             String chunkOwner = "";
-            if (chunk.isLocalChunk()) {
+            if (chunk.isExternalChunk()) {
+                chunkOwner = chunk.getExternalServerName();
+            } else if (chunk.isLocalChunk()) {
                 chunkOwner = serverName;
             }
-            else if (chunk.isExternalChunk()) {
-                try {
-                    Object newChunkHolder = getChunkHolderMethod.invoke(null, world, chunkX, chunkZ);
-                    Field externalOwnerField = newChunkHolder.getClass().getDeclaredField("externalOwner");
-                    externalOwnerField.setAccessible(true);
-                    Field nameField = externalOwnerField.getType().getDeclaredField("name");
-                    nameField.setAccessible(true);
-                    Object externalOwner = externalOwnerField.get(newChunkHolder);
-                    chunkOwner = (String) nameField.get(externalOwner);
-                } catch (NoSuchFieldException | IllegalAccessException  | InvocationTargetException | NullPointerException e) {
-                    e.printStackTrace();
-                }
-            }
             else {
-                logger.warning("Chunk is not local or external: " + chunk);
+                logger.warning("Chunk is neither local nor external: " + chunk);
             }
             // logger.info("Player: " + playerName + " World: " + world + " Chunk: " + chunkX + " " + chunkZ + " Owner: " + chunkOwner);
             PLAYER_LOCATION.labels(playerName, uid, world, String.valueOf(chunkX), String.valueOf(chunkZ), chunkOwner).set(1);
